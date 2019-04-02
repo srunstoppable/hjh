@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>新增user</title>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
+    <script src="/js/layui-v2.4.3/layui/layui.js"></script>
+    <script src="/js/pub_js/time.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="/js/jQuery/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="/js/jQuery/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="/js/utf8-jsp/ueditor.config.js"></script>
+    <script type="text/javascript" src="/js/utf8-jsp/ueditor.all.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/js/utf8-jsp/lang/zh-cn/zh-cn.js"></script>
+    <link rel="stylesheet" href="/js/layui-v2.4.3/layui/css/layui.css" media="all">
+</head>
+<body>
+<form id="fm" method="post" action="/course/import" enctype="multipart/form-data">
+    <tr>
+        <td>选择Excel文件:</td>
+        <td><input name="file" type="file"></input></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><input type="submit" value="Submit"></input></td>
+    </tr>
+
+
+</form>
+
+
+<script>
+    $(document).ready(function () {
+        $('#fm').form({
+            dataType:"json",
+            async: false,
+            contentType: "application/json",
+            success:function (result) {
+                var data = JSON.parse(result);
+                if (data.msg == 'success') {
+                    parent.location.reload();
+                    var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                    parent.layer.close(index); //再执行关闭
+                    parent.location.reload();
+                }else {
+                    alert(data.msg);
+                }
+            }
+        })
+    });
+
+
+</script>
+
+</body>
+</html>
