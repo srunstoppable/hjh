@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改课程信息</title>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
+    <script src="/js/layui-v2.4.3/layui/layui.js"></script>
+    <script src="/js/pub_js/time.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript"   src="/js/jQuery/jquery.easyui.min.js" ></script>
+    <script type="text/javascript"   src="/js/jQuery/jquery.easyui.min.js" ></script>
+    <script type="text/javascript" src="/js/utf8-jsp/ueditor.config.js"></script>
+    <script type="text/javascript" src="/js/utf8-jsp/ueditor.all.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/js/utf8-jsp/lang/zh-cn/zh-cn.js"></script>
+    <link rel="stylesheet" href="/js/layui-v2.4.3/layui/css/layui.css" media="all">
+</head>
+<body>
+<form class="layui-form" action="">
+    <div class="layui-form-item" style="width:40%">
+        <label class="layui-form-label">id </label>
+        <div class="layui-input-block">
+            <input type="text" name="id"   id="id" required  lay-verify="required" placeholder="请输入id" autocomplete="off" class="layui-input"  readonly  unselectable="on">
+        </div>
+    </div>
+    <div class="layui-form-item" style="width:80%">
+        <label class="layui-form-label">课程名称</label>
+        <div class="layui-input-block">
+            <input type="text"  id="name" name="name" required  lay-verify="required" placeholder="输入名称" autocomplete="off" class="layui-input" >
+        </div>
+    </div>
+    <div class="layui-form-item" style="width:100%">
+        <label class="layui-form-label">题目</label>
+        <div class="layui-input-block">
+            <input type="text" id="content" name="content" required  lay-verify="required" placeholder="请输入题目内容" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item" style="width:100%">
+        <label class="layui-form-label">选项A</label>
+        <div class="layui-input-block">
+            <input type="text" id="a" name="a" required  lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item" style="width:100%">
+        <label class="layui-form-label">选项B</label>
+        <div class="layui-input-block">
+            <input type="text" id="b" name="b" required  lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item" style="width:100%">
+        <label class="layui-form-label">选项C</label>
+        <div class="layui-input-block">
+            <input type="text" id="c" name="c" required  lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item" style="width:100%">
+        <label class="layui-form-label">选项D</label>
+        <div class="layui-input-block">
+            <input type="text" id="d" name="d" required  lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item" style="width:100%">
+        <label class="layui-form-label">答案</label>
+        <div class="layui-input-block">
+            <input type="text" id="answer" name="answer" required  lay-verify="required" placeholder="" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+
+
+
+
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit lay-filter="formDemo">修改</button>
+
+        </div>
+    </div>
+</form>
+
+<script>
+
+    layui.use('form', function(){
+        var $=layui.jquery;
+        $.ajaxSetup({
+            headers: {
+                "Authorization": window.localStorage.getItem("token")
+            }
+        });
+        var form = layui.form;
+        form.on('submit(formDemo)', function(data){
+            var JsonData=JSON.stringify(data.field);
+            $.ajax({
+                type:"put",
+                url:"/questionChoice/update",
+                dataType:"json",
+                contentType:"application/json",
+                data:JsonData,
+                success:function (result) {
+                    if(result.msg=='success'){
+                        parent.location.reload();
+                        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                        parent.layer.close(index); //再执行关闭
+                        parent.location.reload();
+                    }
+                    else{
+                        alert(result.msg);
+                    }
+                }
+            });
+            return false;
+        });
+    });
+
+
+
+</script>
+
+</body>
+</html>

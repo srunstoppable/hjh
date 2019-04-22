@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
+    <script src="/js/layui-v2.4.3/layui/layui.js"></script>
+    <script type="text/javascript" src="../js/jQuery/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../js/jQuery/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="../js/check.js"></script>
+    <link rel="stylesheet" type="text/css" href="../js/jQuery/themes/default/easyui.css"/>
+    <link rel="stylesheet" type="text/css" href="../js/jQuery/themes/icon.css"/>
+    <link rel="stylesheet" href="/js/layui-v2.4.3/layui/css/layui.css" media="all"/>
+</head>
+<body class="layui-layout-body">
+<div class="layui-layout layui-layout-admin">
+    <div class="layui-header">
+        <div class="layui-logo">课堂互动-控制台-教师</div>
+        <!-- 头部区域（可配合layui已有的水平导航） -->
+        <ul class="layui-nav layui-layout-right">
+            <li class="layui-nav-item"><a href="#" onclick="logout()">退出</a></li>
+        </ul>
+    </div>
+    <div class="layui-side layui-bg-black">
+        <div class="layui-side-scroll">
+            <!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+            <ul class="layui-nav layui-nav-tree" lay-filter="test">
+                <li class="layui-nav-item"><a href="#" onclick="openTabs(this)">课程管理</a></li>
+                <li class="layui-nav-item"><a href="#" onclick="openTabs(this)">学生管理</a></li>
+                <li class="layui-nav-item"><a href="#" onclick="openTabs(this)">考勤记录</a></li>
+                <li class="layui-nav-item"><a href="#" onclick="openTabs(this)">题库-判断题</a></li>
+                <li class="layui-nav-item"><a href="#" onclick="openTabs(this)">题库-选择题</a></li>
+                <li class="layui-nav-item"><a href="#" onclick="openTabs(this)">课堂问答记录</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="layui-body" style="height: 100%">
+        <div id="tt" class="easyui-tabs" style="width: 100%;height: 100%; ">
+
+
+        </div>
+
+    </div>
+
+</div>
+<script>
+    $(document).ready(function () {
+
+        var content1 = '<iframe scrolling="no" frameborder="0" src="/views/welcome.html" style="width:100%;height:100%;"></iframe>'
+        $('#tt').tabs('add', {
+            title: '首页',
+            content: content1,
+            closable: false
+
+        });
+    });
+
+    function openTabs(param) {
+        var value = param.innerHTML;
+        if (value == "学生管理") {
+            var content = '<iframe scrolling="no" frameborder="0" src="/views/student.html" style="width:100%;height:100%;"></iframe>';
+            if ($('#tt').tabs('exists', '学生管理')) {
+
+                $('#tt').tabs('select', '学生管理');
+            } else {
+                $('#tt').tabs('add', {
+                    title: '学生管理',
+                    content: content,
+                    closable: true
+
+                });
+            }
+
+        }
+
+        if (value == "课程管理") {
+            var content = '<iframe scrolling="no" frameborder="0" src="/views/course2.html" style="width:100%;height:100%;"></iframe>';
+            if ($('#tt').tabs('exists', '课程管理')) {
+
+                $('#tt').tabs('select', '课程管理');
+            } else {
+                $('#tt').tabs('add', {
+                    title: '课程管理',
+                    content: content,
+                    closable: true
+
+                });
+            }
+        }
+        if (value == "考勤记录") {
+            var content = '<iframe scrolling="no" frameborder="0" src="/views/checkRecord.html" style="width:100%;height:100%;"></iframe>';
+            if ($('#tt').tabs('exists', '考勤记录')) {
+
+                $('#tt').tabs('select', '考勤记录');
+            } else {
+                $('#tt').tabs('add', {
+                    title: '考勤记录',
+                    content: content,
+                    closable: true
+
+                });
+            }
+        }
+
+       if (value == "课堂问答记录") {
+            var content = '<iframe scrolling="no" frameborder="0" src="/views/answerRecord.html" style="width:100%;height:100%;"></iframe>';
+            if ($('#tt').tabs('exists', '课堂问答记录')) {
+                $('#tt').tabs('select', '课堂问答记录');
+            } else {
+                $('#tt').tabs('add', {
+                    title: '课堂问答记录',
+                    content: content,
+                    closable: true
+
+                });
+            }
+        }
+        if (value == "题库-判断题") {
+            var content = '<iframe scrolling="no" frameborder="0" src="/views/question.html" style="width:100%;height:100%;"></iframe>';
+            if ($('#tt').tabs('exists', '题库-判断题')) {
+                $('#tt').tabs('select', '题库-判断题');
+            } else {
+                $('#tt').tabs('add', {
+                    title: '题库-判断题',
+                    content: content,
+                    closable: true
+
+                });
+            }
+        }
+
+        if (value == "题库-选择题") {
+            var content = '<iframe scrolling="no" frameborder="0" src="/views/question_Choice.html" style="width:100%;height:100%;"></iframe>';
+            if ($('#tt').tabs('exists', '题库-选择题')) {
+                $('#tt').tabs('select', '题库-选择题');
+            } else {
+                $('#tt').tabs('add', {
+                    title: '题库-选择题',
+                    content: content,
+                    closable: true
+
+                });
+            }
+        }
+    }
+
+    function logout() {
+        window.localStorage.clear();
+        window.location.href = "/login_view.html";
+    }
+</script>
+
+
+</body>
+</html>
