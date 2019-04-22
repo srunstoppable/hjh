@@ -14,8 +14,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 /**
  * <p>
@@ -29,11 +28,11 @@ import java.util.TreeMap;
 public class UserinfoServiceImpl extends ServiceImpl<UserinfoMapper, Userinfo> implements UserinfoService {
 
     @Override
-    public boolean login(Userinfo user) {
+    public Userinfo login(Userinfo user) {
         EntityWrapper<Userinfo> ew = new EntityWrapper<>();
         ew.eq("id", user.getId());
         ew.eq("password", user.getPassword());
-        return selectObj(ew) != null;
+        return selectOne(ew);
     }
 
     @Override
@@ -77,8 +76,7 @@ public class UserinfoServiceImpl extends ServiceImpl<UserinfoMapper, Userinfo> i
         try {
             insert(userinfo);
             return Response.success();
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             return Response.fail("请确认是否有该用户信息!");
         }
 
@@ -103,5 +101,30 @@ public class UserinfoServiceImpl extends ServiceImpl<UserinfoMapper, Userinfo> i
     public Response update(Userinfo userinfo) {
         updateById(userinfo);
         return Response.success();
+    }
+
+    @Override
+    public Response students(String course) {
+        return Response.success(baseMapper.student(course));
+    }
+
+    @Override
+    public List<Userinfo> stuRand(String course) {
+        List<Userinfo> list = baseMapper.student(course);
+        List<Userinfo> userinfolist = null;
+        if (list == null) {
+            return null;
+        }
+        int size = new Random().nextInt(list.size() + 1);
+        while (size == 0) {
+            size = new Random().nextInt(list.size() + 1);
+        }
+        Set<Userinfo> set = new HashSet<>();
+        while (set.size() < size) {
+            set.add(list.get(new Random().nextInt(list.size())));
+        }
+        userinfolist.addAll(set);
+        return userinfolist;
+
     }
 }

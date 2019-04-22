@@ -18,7 +18,7 @@
     <div class="layui-form-item" style="width:40%">
         <label class="layui-form-label">课程名称</label>
         <div class="layui-input-block">
-            <input type="text" name="name" id="name" required lay-verify="required" placeholder="输入名称" autocomplete="off" class="layui-input"
+            <input type="text" name="course" id="course" required lay-verify="required" placeholder="输入名称" autocomplete="off" class="layui-input"
                    style="width: 200px;">
         </div>
     </div>
@@ -51,7 +51,7 @@
             var JsonData=JSON.stringify(data.field);
             $.ajax({
                 type: "post",
-                url: "/course/add",
+                url: "/courseStu/add",
                 contentType: "application/json",
                 data: JsonData,
                 success: function (result) {

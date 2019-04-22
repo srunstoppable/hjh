@@ -16,18 +16,13 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @author s r
  * @date 2018/11/21
  */
-@Profile({"dev","prd"})
 @Configuration
 @EnableSwagger2
 public class Swagger2 {
 
-    @Value("${swagger.enable}")
-    private boolean enableSwagger;
-
     @Bean
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .enable(enableSwagger)
                 .apiInfo(apiInfo())//调用apiInfo方法,创建一个ApiInfo实例,里面是展示在文档页面信息内容
                 .select()
                 //控制暴露出去的路径下的实例
@@ -41,7 +36,7 @@ public class Swagger2 {
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 //页面标题
-                .title("Spring Boot 测试使用 Swagger2 构建RESTful API")
+                .title(" Swagger2 构建RESTful API 模拟测试 互动系统功能")
                 //创建人
                 .contact("hjh")
                 //版本号

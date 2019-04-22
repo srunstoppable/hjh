@@ -90,13 +90,18 @@
                         contentType: "application/json;charset=utf-8",
                         data: JsonData,
                         success: function (result) {
-                            if (result.code == 0) {
+                            window.localStorage.setItem("token", result.token);
+                            if (result.success ) {
+                                if(result.data.iden == '管理员'){
                                 window.location.href = "/views/index.html";
-                                window.localStorage.setItem("token", result.data);
+                                }else{
+                                    window.location.href = "/views/index_teacher.html";
+                                }
+
 
                             }
                             else
-                                alert(result.msg);
+                                alert("用户名或密码错误！");
                         }
                     });
                 }

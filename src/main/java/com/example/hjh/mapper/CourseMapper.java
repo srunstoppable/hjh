@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.example.hjh.entity.Course;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -25,5 +26,7 @@ public interface CourseMapper extends BaseMapper<Course> {
     @Select("select count(*) from course")
     public int selectTotal();
 
+    @Select("select * from course where name in (select course from course_stu where id = #{ id} )")
+    public List<Course>courses(@Param("id")String id);
 
 }

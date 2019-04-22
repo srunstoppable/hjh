@@ -24,7 +24,7 @@
     <button class="layui-btn layui-btn-sm" lay-event="add">新增</button>
     <button class="layui-btn layui-btn-sm" lay-event="update">编辑</button>
     <button class="layui-btn layui-btn-sm" lay-event="delete">删除</button>
-    <button class="layui-btn layui-btn-sm" lay-event="import">批量导入</button>
+    <button class="layui-btn layui-btn-sm" lay-event="out">批量新增</button>
     <!--<button class="layui-btn layui-btn-sm" lay-event="del">删除</button>-->
     <!--<button class="layui-btn layui-btn-sm" lay-event="save">新增</button>-->
     <!--<input   style="width: 200px;height: 30px;line-height: 30px"  id="condition">-->
@@ -53,7 +53,7 @@
             elem: '#test',
             url: '/course/list',
             toolbar: '#toolbarDemo',
-            title: '车位管理',
+            title: '课程管理',
             page: true,
             cols: [[
                 {type: 'checkbox', fixed: 'left'},
@@ -118,7 +118,7 @@
                             url: "/course/delete",
                             data: {"id": JsonData.id},
                             success: function (result) {
-                                if (result.msg = "success") {
+                                if (result.msg == "success") {
                                     table.reload("test")
                                 }
                             }
@@ -126,7 +126,7 @@
                     }
                 }
             }
-            else if(obj.event='import'){
+            else if (obj.event = 'out') {
                 layer.open({
                     id: "save",
                     type: 2,

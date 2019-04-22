@@ -4,6 +4,7 @@ package com.example.hjh.controller;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.example.hjh.entity.Course;
 import com.example.hjh.entity.Userinfo;
+import com.example.hjh.jwt.JWTUtil;
 import com.example.hjh.response.Response;
 import com.example.hjh.service.CourseService;
 import io.swagger.annotations.Api;
@@ -14,7 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.Null;
+import java.awt.geom.Point2D;
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * <p>
@@ -24,7 +31,7 @@ import java.io.IOException;
  * @author hjh
  * @since 2019-03-30
  */
-@Api(tags = "课程api")
+@Api("课程api")
 @RestController
 @RequestMapping("/course")
 public class CourseController extends BaseController {
@@ -70,6 +77,48 @@ public class CourseController extends BaseController {
         Page<Course> page = new Page<>(i[0], i[1]);
         return courseService.courses(page);
     }
+
+    @ApiOperation(value = "老师开启签到", notes = "开启签到", response = Response.class)
+    @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, paramType = "header")
+    @PostMapping("/open")
+    public Response open(@RequestParam("name") String name, @RequestBody Point2D point2D) {
+       return courseService.startOpen(name,point2D);
+    }
+
+
+    @ApiOperation(value = "老师开启签到时选择课程列表", notes = "老师开启签到时选择课程列表", response = Response.class)
+    @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, paramType = "header")
+    @GetMapping("/Tcourse")
+    public Response getTc(HttpServletRequest request) {
+        return Response.success(courseService.getCourse(JWTUtil.getUsername(JWTUtil.getToken(request))));
+    }
+
+    @ApiOperation(value = "学生签到时选择课程列表", notes = "学生签到时选择课程列表", response = Response.class)
+    @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, paramType = "header")
+    @GetMapping("/Scourse")
+    public Response getSc(HttpServletRequest request) {
+        return courseService.getScourse(JWTUtil.getUsername(JWTUtil.getToken(request)));
+    }
+
+    @ApiOperation(value = "老师查询自己的课程", notes = "老师查询自己的课程", response = Response.class)
+    @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, paramType = "header")
+    @GetMapping("/obtain")
+    public Response getC(HttpServletRequest request) {
+        Map<Integer, Object> map = new TreeMap<>();
+        for (Course course : courseService.getCourse(JWTUtil.getUsername(JWTUtil.getToken(request)))) {
+            map.put(course.getId(), course);
+        }
+        return Response.success().putAllT(map);
+
+    }
+
+    @ApiOperation(value = "老师关闭签到", notes = "老师关闭签到", response = Response.class)
+    @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, paramType = "header")
+    @PostMapping("/close")
+    public Response close(@RequestParam("name") String name) {
+        return courseService.close(name);
+    }
+
 
 }
 
