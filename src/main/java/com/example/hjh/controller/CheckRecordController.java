@@ -59,8 +59,8 @@ public class CheckRecordController {
     @ApiOperation(value = "学生签到", notes = "学生签到", response = Response.class)
     @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, paramType = "header")
     @PostMapping("/checkIn")
-    public Response check(@RequestParam("name") String name, @RequestBody Point2D point2D, HttpServletRequest request) {
-        return Response.success(checkRecordService.checkIn(JWTUtil.getUsername(JWTUtil.getToken(request)), name,point2D));
+    public Response check(@RequestParam("name") String name, @RequestParam("x")double x,  @RequestParam("y")double y,HttpServletRequest request) {
+        return Response.success(checkRecordService.checkIn(JWTUtil.getUsername(JWTUtil.getToken(request)), name,x,y));
     }
 
 

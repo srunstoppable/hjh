@@ -101,7 +101,7 @@ public class QuestionChoiceServiceImpl extends ServiceImpl<QuestionChoiceMapper,
     public QuestionChoice listRand(String course) {
         EntityWrapper<QuestionChoice> ew = new EntityWrapper<>();
         ew.eq("name", course);
-        if (selectList(ew) == null) {
+        if (selectList(ew) .size() == 0) {
             return null;
         }
         List<QuestionChoice> list = selectList(ew);
@@ -112,7 +112,7 @@ public class QuestionChoiceServiceImpl extends ServiceImpl<QuestionChoiceMapper,
 
     @Override
     public List<QuestionChoice> getL(String id) {
-        if(baseMapper.choice(id) == null){
+        if(baseMapper.choice(id).size() == 0){
             return Collections.emptyList();
         }else return baseMapper.choice(id);
     }

@@ -164,7 +164,6 @@ public class QuestionController extends BaseController {
                         .setTime(new Date()).setCourse(conditionEntity.getName()).setType("随机");
                 examinationService.add(examination);
                 //-----end  插入套题记录
-
                 //----start 插图套-题关联
                 for (Question question : list1) {
                     Contact contact = new Contact();
@@ -180,16 +179,6 @@ public class QuestionController extends BaseController {
         }
         return Response.success();
 
-//        public Response publishT(@RequestBody Question  question, HttpServletRequest request) {
-//        Userinfo userinfo = userinfoService.stuRand(question.getName());
-//        AnsRecord ansRecord = new AnsRecord();
-//        ansRecord.setStuId(userinfo.getId())
-//                .setPromulgator(JWTUtil.getUsername(JWTUtil.getToken(request)))
-//                .setContent(question.getContent())
-//                .setCourseName(question.getName())
-//                .setResult("待定")
-//                .setType("随机");
-//        return ansRecordService.add(ansRecord);
 
     }
 
@@ -197,20 +186,25 @@ public class QuestionController extends BaseController {
     @ApiOperation(value = "随机题目发布，学生抢答,redis并发", notes = "随机题目发布，学生抢答,redis并发", response = Response.class)
     @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, paramType = "header")
     @PostMapping("/pubRand")
-    public Response publishRand(@RequestBody ConditionEntity conditionEntity, HttpServletRequest request) {
-        Question question = questionService.listRand(conditionEntity.getName());
-        QuestionChoice questionChoice = questionChoiceService.listRand(conditionEntity.getName());
+    public Response publishRand(@RequestParam("course")String name, HttpServletRequest request) {
+        Question question = questionService.listRand(name);
+        QuestionChoice questionChoice = questionChoiceService.listRand(name);
         Examination examination = new Examination();
         examination.setPromulgator(JWTUtil.getUsername(JWTUtil.getToken(request))).setTime(new Date())
-                .setCourse(conditionEntity.getName()).setType("抢答");
-//        AnsRecord ansRecord = new AnsRecord();
-//        ansRecord.setPromulgator(JWTUtil.getUsername(JWTUtil.getToken(request)))
-//                .setContent(question.getContent())
-//                .setCourseName(question.getName())
-//                .setResult("待定")
-//                .setType("抢答");
-//        //将题目id作为K
+                .setCourse(name).setType("抢答");
+        examination.setId(UUID.randomUUID().toString().replace("-","").substring(1,10));
         redisTemplate.opsForValue().set(examination.getId(), examination);
+        examinationService.add(examination);
+        if(question!=null) {
+            Contact contact = new Contact();
+            contact.setExamId(examination.getId()).setType(question.getType()).setQuestionId(question.getId());
+            contactService.add(contact);
+        }
+        if(questionChoice!=null) {
+            Contact contact2 = new Contact();
+            contact2.setExamId(examination.getId()).setType(questionChoice.getType()).setQuestionId(questionChoice.getId());
+            contactService.add(contact2);
+        }
         return Response.success("发布成功!");
 
     }
@@ -227,6 +221,7 @@ public class QuestionController extends BaseController {
             try {
                 examination.setStuId(JWTUtil.getUsername(JWTUtil.getToken(request)));
                 redisTemplate.opsForValue().set(examination.getId(), examination);
+                examinationService.updateById(examination);
                 flag = true;
             } finally {
                 lock.unlock();

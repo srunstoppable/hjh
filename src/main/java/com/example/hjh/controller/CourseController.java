@@ -81,8 +81,8 @@ public class CourseController extends BaseController {
     @ApiOperation(value = "老师开启签到", notes = "开启签到", response = Response.class)
     @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, paramType = "header")
     @PostMapping("/open")
-    public Response open(@RequestParam("name") String name, @RequestBody Point2D point2D) {
-       return courseService.startOpen(name,point2D);
+    public Response open(@RequestParam("name") String name, @RequestParam("x")double x,@RequestParam("y")double y) {
+       return courseService.startOpen(name,x,y);
     }
 
 

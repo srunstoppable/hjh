@@ -45,14 +45,9 @@ public class ExaminationServiceImpl extends ServiceImpl<ExaminationMapper, Exami
 
     @Override
     public List<Examination> noStu(String name) {
-        EntityWrapper<Examination>ew = new EntityWrapper<>();
-        ew.eq("stu_id","").or().eq("stu_id",null);
-        ew.eq("course",name);
-        if(selectList(ew) == null){
-            return Collections.emptyList();
-        }else {
-            return selectList(ew);
-        }
+
+            return baseMapper.exams(name);
+
     }
 
 

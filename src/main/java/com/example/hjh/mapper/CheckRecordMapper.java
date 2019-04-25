@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,4 +28,8 @@ public interface CheckRecordMapper extends BaseMapper<CheckRecord> {
 
     @Select("select * from check_record where userid = #{id}")
     public List<CheckRecord>getStuRecord(@Param("id")String id);
+
+
+    @Select("select * from check_record where to_days(date) =to_days(now()) and userid = #{id} and course = #{course}")
+    public  List<CheckRecord> reCheck(@Param("date") Date date,@Param("id") String id,@Param("course") String couese);
 }

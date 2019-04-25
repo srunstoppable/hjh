@@ -2,7 +2,6 @@ package com.example.hjh.controller;
 
 
 import com.baomidou.mybatisplus.plugins.Page;
-import com.example.hjh.entity.Course;
 import com.example.hjh.entity.CourseStu;
 import com.example.hjh.jwt.JWTUtil;
 import com.example.hjh.response.Response;

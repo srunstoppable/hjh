@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.service.IService;
 import com.example.hjh.response.Response;
 
 import java.awt.geom.Point2D;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,7 +26,10 @@ public interface CheckRecordService extends IService<CheckRecord> {
     public Response listStu(String id);
 
     //学生签到
-    public Response checkIn(String id, String name, Point2D point2D);
+    public Response checkIn(String id, String name, double x, double y);
 
+
+    //学生查询今天是否已经签到
+    public boolean isCheck(String id, String name, Date date);
 
 }

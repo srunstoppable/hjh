@@ -128,13 +128,13 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
     }
 
     @Override
-    public Response startOpen(String name, Point2D point2D) {
+    public Response startOpen(String name, double x ,double y) {
         EntityWrapper<Course> ew = new EntityWrapper<>();
         ew.eq("name", name);
         Course course = selectOne(ew);
         course.setBegin(new Date());
-        course.setLatitude(point2D.getY());
-        course.setLongitude(point2D.getX());
+        course.setLatitude(x);
+        course.setLongitude(y);
         course.setOpen("Y");
         updateById(course);
         return Response.success();

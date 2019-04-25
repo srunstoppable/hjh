@@ -76,7 +76,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
                 try {
                     insert(question);
                 } catch (Exception e) {
-                    continue ;
+                    continue;
                 }
             }
             return Response.success("导入成功");
@@ -110,9 +110,11 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
 
     @Override
     public List<Question> getL(String id) {
-        if(baseMapper.ques(id) == null){
+        if (baseMapper.ques(id).size() == 0) {
             return Collections.emptyList();
-        }else return baseMapper.ques(id);
+        } else {
+            return baseMapper.ques(id);
+        }
     }
 
     @Override

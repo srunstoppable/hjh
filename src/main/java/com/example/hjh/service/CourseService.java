@@ -45,7 +45,7 @@ public interface CourseService extends IService<Course> {
 
 
     //老师开启签到
-    public Response startOpen(String name, Point2D point2D);
+    public Response startOpen(String name, double x,double y);
 
 
     //关闭签到
