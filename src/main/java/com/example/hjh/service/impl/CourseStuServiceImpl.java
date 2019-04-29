@@ -28,10 +28,10 @@ import java.util.TreeMap;
 public class CourseStuServiceImpl extends ServiceImpl<CourseStuMapper, CourseStu> implements CourseStuService {
 
     @Override
-    public Response list(Page<CourseStu> page,String id) {
-        Map<Integer,Object> map =new TreeMap<>();
-        for(CourseStu courseStu : baseMapper.getAll(page,id)){
-            map.put(courseStu.getId(),courseStu);
+    public Response list(Page<CourseStu> page, String id) {
+        Map<Integer, Object> map = new TreeMap<>();
+        for (CourseStu courseStu : baseMapper.getAll(page, id)) {
+            map.put(courseStu.getId(), courseStu);
         }
         return Response.success(baseMapper.count(id)).putAllT(map);
     }
@@ -60,15 +60,19 @@ public class CourseStuServiceImpl extends ServiceImpl<CourseStuMapper, CourseStu
 
     @Override
     public Response add(CourseStu courseStu) {
-        if(insert(courseStu)){
-            return Response.success();
+        try {
+            if (insert(courseStu)) {
+                return Response.success();
+            }
+        } catch (Exception e) {
+            return Response.fail("新增失败，请输入正确的课程名/学号");
         }
-        return Response.fail();
+        return Response.fail("新增失败");
     }
 
     @Override
     public Response delete(int id) {
-        if(deleteById(id)){
+        if (deleteById(id)) {
             return Response.success();
         }
         return Response.fail();
@@ -76,7 +80,7 @@ public class CourseStuServiceImpl extends ServiceImpl<CourseStuMapper, CourseStu
 
     @Override
     public Response update(CourseStu courseStu) {
-        if(updateById(courseStu)){
+        if (updateById(courseStu)) {
             return Response.success();
         }
         return Response.fail();

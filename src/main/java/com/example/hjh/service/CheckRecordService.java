@@ -2,6 +2,7 @@ package com.example.hjh.service;
 
 import com.example.hjh.entity.CheckRecord;
 import com.baomidou.mybatisplus.service.IService;
+import com.example.hjh.entity.condition.CheckRecordChange;
 import com.example.hjh.response.Response;
 
 import java.awt.geom.Point2D;
@@ -22,8 +23,11 @@ public interface CheckRecordService extends IService<CheckRecord> {
     // 老师查询老师-课程-学生相关联的 考勤记录
     public List<CheckRecord> lists(String id);
 
+    // 老师查询老师-课程-学生相关联的 考勤记录/对应课程
+    public List<CheckRecordChange> listsTo(String course);
+
     //学生查询自己的
-    public Response listStu(String id);
+    public Response listStu(String userid,String course);
 
     //学生签到
     public Response checkIn(String id, String name, double x, double y);

@@ -3,6 +3,7 @@ package com.example.hjh.service.impl;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.example.hjh.entity.CheckRecord;
 import com.example.hjh.entity.Course;
+import com.example.hjh.entity.condition.CheckRecordChange;
 import com.example.hjh.mapper.CheckRecordMapper;
 import com.example.hjh.response.Response;
 import com.example.hjh.service.CheckRecordService;
@@ -33,18 +34,54 @@ public class CheckRecordServiceImpl extends ServiceImpl<CheckRecordMapper, Check
 
     @Override
     public List<CheckRecord> lists(String id) {
-        if (baseMapper.get(id) == null) {
+        if (baseMapper.get(id) .size() == 0) {
             return Collections.emptyList();
         }
         return baseMapper.get(id);
     }
 
     @Override
-    public Response listStu(String id) {
-        if (baseMapper.getStuRecord(id) == null) {
+    public List<CheckRecordChange> listsTo(String course) {
+        EntityWrapper<CheckRecord>ew=new EntityWrapper<>();
+        ew.eq("course",course);
+
+        List<CheckRecordChange> list = new ArrayList<>();
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
+        if (selectList(ew) .size() == 0) {
+            return Collections.emptyList();
+        }
+        for(CheckRecord checkRecord:selectList(ew)){
+            CheckRecordChange checkRecordChange=new CheckRecordChange();
+            checkRecordChange.setCourse(checkRecord.getCourse())
+                    .setDate(simpleDateFormat.format(checkRecord.getDate()))
+                    .setLate(checkRecord.getLate())
+                    .setUserid(checkRecord.getUserid());
+            list.add(checkRecordChange);
+        }
+        return list;
+    }
+
+
+
+    @Override
+    public Response listStu(String userid,String course) {
+        EntityWrapper<CheckRecord>ew=new EntityWrapper<>();
+        ew.eq("userid",userid);
+        ew.eq("course",course);
+        List<CheckRecordChange> list = new ArrayList<>();
+        if (selectList(ew) .size() == 0) {
             return Response.success(Collections.emptyList());
         }
-        return Response.success(baseMapper.getStuRecord(id));
+        SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
+        for(CheckRecord checkRecord:selectList(ew)){
+            CheckRecordChange checkRecordChange=new CheckRecordChange();
+            checkRecordChange.setCourse(checkRecord.getCourse())
+                    .setDate(simpleDateFormat.format(checkRecord.getDate()))
+                    .setLate(checkRecord.getLate())
+                    .setUserid(checkRecord.getUserid());
+            list.add(checkRecordChange);
+        }
+        return Response.success(list);
     }
 
 

@@ -21,14 +21,15 @@ import java.util.List;
  * @since 2019-04-07
  */
 @Service
-public class AnsRecordServiceImpl extends ServiceImpl<AnsRecordMapper, AnsRecord> implements AnsRecordService {
+public
+class AnsRecordServiceImpl extends ServiceImpl<AnsRecordMapper, AnsRecord> implements AnsRecordService {
 
     @Override
-    public List<AnsRecord>listTea(String id) {
+    public List<AnsRecord> listWeb(String id) {
         EntityWrapper<AnsRecord> ew = new EntityWrapper<>();
         ew.eq("promulgator", id);
         List<AnsRecord> list = selectList(ew);
-        if (list == null) {
+        if (list.size() == 0) {
             return Collections.emptyList();
         } else {
             return list;
@@ -36,11 +37,25 @@ public class AnsRecordServiceImpl extends ServiceImpl<AnsRecordMapper, AnsRecord
     }
 
     @Override
-    public Response listStu(String id) {
+    public List<AnsRecord>listTea(String course,String id) {
         EntityWrapper<AnsRecord> ew = new EntityWrapper<>();
-        ew.eq("userid", id);
+        ew.eq("promulgator", id);
+        ew.eq("course_name",course);
         List<AnsRecord> list = selectList(ew);
-        if (list == null) {
+        if (list.size() == 0) {
+            return Collections.emptyList();
+        } else {
+            return list;
+        }
+    }
+
+    @Override
+    public Response listStu(String course,String id) {
+        EntityWrapper<AnsRecord> ew = new EntityWrapper<>();
+        ew.eq("stu_id", id);
+        ew.eq("course_name",course);
+        List<AnsRecord> list = selectList(ew);
+        if (list .size() == 0) {
             return Response.success(Collections.emptyList());
         } else {
             return Response.success(list);

@@ -145,9 +145,6 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
         EntityWrapper<Course> ew = new EntityWrapper<>();
         ew.eq("name", name);
         Course course = selectOne(ew);
-        if (course.getEnd() == null || course.getOpen() == null) {
-            return Response.fail("未定义签到时间！");
-        }
         course.setOpen("N");
         updateById(course);
         return Response.success();
@@ -162,7 +159,10 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
 
     @Override
     public Response getScourse(String id) {
-        return Response.success(baseMapper.courses(id));
+        if(id == null){
+            return Response.fail("非法用户！");
+        }
+        return Response.success(baseMapper.cous(id));
     }
 
     @Override

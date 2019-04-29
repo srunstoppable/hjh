@@ -1,6 +1,7 @@
 package com.example.hjh.controller;
 
 import com.example.hjh.entity.CheckRecord;
+import com.example.hjh.entity.condition.Jw;
 import com.example.hjh.jwt.JWTUtil;
 import com.example.hjh.response.Response;
 import com.example.hjh.service.CheckRecordService;
@@ -41,26 +42,26 @@ public class CheckRecordController {
         return Response.success().putAllT(map);
     }
 
-    @ApiOperation(value = "老师查询所有的考勤记录", notes = "老师查询所有的考勤记录", response = Response.class)
+    @ApiOperation(value = "老师查询对应课程的考勤记录", notes = "老师查询对应课程的考勤记录", response = Response.class)
     @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, paramType = "header")
     @GetMapping("/teacher/wx")
-    public Response getTwx(HttpServletRequest request) {
-        return Response.success(checkRecordService.lists(JWTUtil.getUsername(JWTUtil.getToken(request)))) ;
+    public Response getTwx(@RequestParam("course")String course) {
+        return Response.success(checkRecordService.listsTo(course));
     }
 
 
-    @ApiOperation(value = "老师查询所有的考勤记录", notes = "老师查询所有的考勤记录", response = Response.class)
+    @ApiOperation(value = "学生查询对应课程的考勤记录", notes = "学生查询对应课程的考勤记录", response = Response.class)
     @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, paramType = "header")
     @GetMapping("/stu")
-    public Response getS(HttpServletRequest request) {
-        return checkRecordService.listStu(JWTUtil.getUsername(JWTUtil.getToken(request)));
+    public Response getS(@RequestParam("course")String course,HttpServletRequest request) {
+        return checkRecordService.listStu(JWTUtil.getUsername(JWTUtil.getToken(request)),course);
     }
 
     @ApiOperation(value = "学生签到", notes = "学生签到", response = Response.class)
     @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, paramType = "header")
     @PostMapping("/checkIn")
-    public Response check(@RequestParam("name") String name, @RequestParam("x")double x,  @RequestParam("y")double y,HttpServletRequest request) {
-        return Response.success(checkRecordService.checkIn(JWTUtil.getUsername(JWTUtil.getToken(request)), name,x,y));
+    public Response check(@RequestBody Jw jw, HttpServletRequest request) {
+        return Response.success(checkRecordService.checkIn(JWTUtil.getUsername(JWTUtil.getToken(request)), jw.getName(),jw.getLongitude(),jw.getLatitude()));
     }
 
 

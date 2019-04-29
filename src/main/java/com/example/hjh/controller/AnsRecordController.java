@@ -36,7 +36,7 @@ public class AnsRecordController {
     @GetMapping("/teacher")
     public Response getT(HttpServletRequest request) {
         Map<Integer,Object> map =  new TreeMap<>();
-        for (AnsRecord ansRecord:ansRecordService.listTea(JWTUtil.getUsername(JWTUtil.getToken(request)))){
+        for (AnsRecord ansRecord:ansRecordService.listWeb(JWTUtil.getUsername(JWTUtil.getToken(request)))){
             map.put(ansRecord.getId(),ansRecord);
         }
         return Response.success().putAllT(map);
@@ -44,15 +44,15 @@ public class AnsRecordController {
     @ApiOperation(value = "教师查询答题记录/微信端", notes = "教师查询答题记录", response = Response.class)
     @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, paramType = "header")
     @GetMapping("/teacher/wx")
-    public Response getTwx(HttpServletRequest request) {
-        return Response.success(ansRecordService.listTea(JWTUtil.getUsername(JWTUtil.getToken(request))));
+    public Response getTwx(@RequestParam("course")String course , HttpServletRequest request) {
+        return Response.success(ansRecordService.listTea(course,JWTUtil.getUsername(JWTUtil.getToken(request))));
     }
 
     @ApiOperation(value = "学生查询答题记录", notes = "学生查询答题记录", response = Response.class)
     @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, paramType = "header")
     @GetMapping("/student")
-    public Response getS(HttpServletRequest request) {
-        return ansRecordService.listStu(JWTUtil.getUsername(JWTUtil.getToken(request)));
+    public Response getS(@RequestParam("course")String course ,HttpServletRequest request) {
+        return ansRecordService.listStu(course,JWTUtil.getUsername(JWTUtil.getToken(request)));
     }
 
 

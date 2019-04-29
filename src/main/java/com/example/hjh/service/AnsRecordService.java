@@ -16,9 +16,11 @@ import java.util.List;
  */
 public interface AnsRecordService extends IService<AnsRecord> {
 
-    public List<AnsRecord> listTea(String id);
+    public List<AnsRecord> listWeb(String id);
 
-    public Response listStu(String id);
+    public List<AnsRecord> listTea(String course,String id);
+
+    public Response listStu(String course,String id);
 
     public Response add(AnsRecord ansRecord);
 

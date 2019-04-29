@@ -24,10 +24,14 @@ public interface CheckRecordMapper extends BaseMapper<CheckRecord> {
     //老师查询
     @Select("select * from check_record where course in (select name from course where userid = #{id})")
     public List<CheckRecord>get(@Param("id")String id);
+    //老师查询/对应
+    @Select("select * from check_record where course = #{course} ")
+    public List<CheckRecord>getTO(@Param("course")String course);
+
     //学生查询
 
-    @Select("select * from check_record where userid = #{id}")
-    public List<CheckRecord>getStuRecord(@Param("id")String id);
+    @Select("select * from check_record where course = #{course}")
+    public List<CheckRecord>getStuRecord(@Param("course")String course);
 
 
     @Select("select * from check_record where to_days(date) =to_days(now()) and userid = #{id} and course = #{course}")

@@ -26,7 +26,7 @@ public interface CourseMapper extends BaseMapper<Course> {
     @Select("select count(*) from course")
     public int selectTotal();
 
-    @Select("select * from course where name in (select course from course_stu where id = #{ id} )")
-    public List<Course>courses(@Param("id")String id);
+    @Select("select * from course where name in (select course from course_stu where userid = #{id} )")
+    public List<Course>cous(@Param("id")String id);
 
 }

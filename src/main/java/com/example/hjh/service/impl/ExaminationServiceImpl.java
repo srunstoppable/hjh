@@ -45,10 +45,7 @@ public class ExaminationServiceImpl extends ServiceImpl<ExaminationMapper, Exami
 
     @Override
     public List<Examination> noStu(String name) {
-
             return baseMapper.exams(name);
 
     }
-
-
 }

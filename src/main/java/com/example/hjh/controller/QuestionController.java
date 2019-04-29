@@ -3,10 +3,7 @@ package com.example.hjh.controller;
 
 import com.baomidou.mybatisplus.plugins.Page;
 import com.example.hjh.entity.*;
-import com.example.hjh.entity.condition.AnsList;
-import com.example.hjh.entity.condition.Answer;
-import com.example.hjh.entity.condition.ConditionEntity;
-import com.example.hjh.entity.condition.QuesList;
+import com.example.hjh.entity.condition.*;
 import com.example.hjh.jwt.JWTUtil;
 import com.example.hjh.response.Response;
 import com.example.hjh.service.*;
@@ -137,15 +134,6 @@ public class QuestionController extends BaseController {
                 }
             }
         }
-//    public Response publish(@RequestBody Question question, @RequestParam("id") String id, HttpServletRequest request) {
-//        AnsRecord ansRecord = new AnsRecord();
-//        ansRecord.setStuId(id)
-//                .setPromulgator(JWTUtil.getUsername(JWTUtil.getToken(request)))
-//                .setContent(question.getContent())
-//                .setCourseName(question.getName())
-//                .setResult("待定")
-//                .setType("指定");
-//        return ansRecordService.add(ansRecord);
         return Response.success("发布成功!");
     }
 
@@ -186,21 +174,21 @@ public class QuestionController extends BaseController {
     @ApiOperation(value = "随机题目发布，学生抢答,redis并发", notes = "随机题目发布，学生抢答,redis并发", response = Response.class)
     @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, paramType = "header")
     @PostMapping("/pubRand")
-    public Response publishRand(@RequestParam("course")String name, HttpServletRequest request) {
+    public Response publishRand(@RequestParam("course") String name, HttpServletRequest request) {
         Question question = questionService.listRand(name);
         QuestionChoice questionChoice = questionChoiceService.listRand(name);
         Examination examination = new Examination();
         examination.setPromulgator(JWTUtil.getUsername(JWTUtil.getToken(request))).setTime(new Date())
                 .setCourse(name).setType("抢答");
-        examination.setId(UUID.randomUUID().toString().replace("-","").substring(1,10));
+        examination.setId(UUID.randomUUID().toString().replace("-", "").substring(1, 10));
         redisTemplate.opsForValue().set(examination.getId(), examination);
         examinationService.add(examination);
-        if(question!=null) {
+        if (question != null) {
             Contact contact = new Contact();
             contact.setExamId(examination.getId()).setType(question.getType()).setQuestionId(question.getId());
             contactService.add(contact);
         }
-        if(questionChoice!=null) {
+        if (questionChoice != null) {
             Contact contact2 = new Contact();
             contact2.setExamId(examination.getId()).setType(questionChoice.getType()).setQuestionId(questionChoice.getId());
             contactService.add(contact2);
@@ -212,9 +200,9 @@ public class QuestionController extends BaseController {
     @ApiOperation(value = "学生抢答,redis并发,获得回答权，让学生输入答案", notes = "学生抢答,redis并发,获得回答权，让学生输入答案", response = Response.class)
     @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, paramType = "header")
     @PostMapping("/pubRedis")
-    public Response answer(@RequestParam("id") String id, HttpServletRequest request) {
+    public Response answer(@RequestBody ExamId examId, HttpServletRequest request) {
         boolean flag = false;
-        Examination examination = (Examination) redisTemplate.opsForValue().get(id);
+        Examination examination = (Examination) redisTemplate.opsForValue().get(examId.getId());
         ReentrantLock lock = new ReentrantLock();
         if (examination.getStuId() == null) {
             lock.lock();
@@ -249,14 +237,16 @@ public class QuestionController extends BaseController {
             int right = 0;
             if (answer.getType().equals("选择")) {
                 QuestionChoice questionChoice = questionChoiceService.getOne(answer.getId());
-                if (questionChoice.equals(answer.getContent())) {
+                if (questionChoice.getAnswer().equalsIgnoreCase(answer.getContent())) {
                     right++;
                 }
             } else if (answer.getType().equals("判断")) {
                 Question question = questionService.getOne(answer.getId());
-                right++;
+                if (question.getAnswer().equalsIgnoreCase(answer.getContent())) {
+                    right++;
+                }
             }
-            double result = (double) Math.round((right / list.size()) * 1000) / 1000;
+            double result = (double) Math.round((right / total) * 1000) / 1000;
             DecimalFormat decimalFormat = new DecimalFormat("0.00%");
             ansRecord.setResult(decimalFormat.format(result));
         }
@@ -266,7 +256,7 @@ public class QuestionController extends BaseController {
 
     @ApiOperation(value = "学生点击套题后，返回要回答的所有题目", notes = "学生点击套题后，返回要回答的所有题目", response = Response.class)
     @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, paramType = "header")
-    @PostMapping("/getExam")
+    @GetMapping("/getExam")
     public Response getExam(@RequestParam("id") String id) {
         QuesList quesList = new QuesList();
         Examination examination = examinationService.getExam(id);
