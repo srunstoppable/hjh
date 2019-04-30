@@ -87,13 +87,13 @@ public class CheckRecordServiceImpl extends ServiceImpl<CheckRecordMapper, Check
 
     @Override
     public Response checkIn(String id, String name, double x1, double y1) {
+        Course course = courseService.course(name);
+        if (course.getOpen() == null || course.getOpen() .equals("N")) {
+            return Response.fail("对不起，未开放签到功能!");
+        }
         Date now = new Date();
         if(!isCheck(id,name,now)){
             return  Response.fail("你已签到!");
-        }
-        Course course = courseService.course(name);
-        if (course.getOpen() == null || course.getOpen() == "N") {
-            return Response.fail("对不起，未开放签到功能!");
         }
         CheckRecord checkRecord = new CheckRecord();
         checkRecord.setCourse(name).setUserid(id);

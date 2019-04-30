@@ -4,18 +4,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.util.List;
-
 /**
  * @author s r
- * @date 2019/4/13
+ * @date 2019/4/29
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class AnsList {
+public class CourseName {
     private String name;
-    private String promulgator;
-    private List<Answer> list;
-    private String id;
 }

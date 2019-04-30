@@ -1,5 +1,6 @@
 package com.example.hjh.service.impl;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.example.hjh.entity.Contact;
 import com.example.hjh.mapper.ContactMapper;
 import com.example.hjh.service.ContactService;
@@ -20,5 +21,13 @@ public class ContactServiceImpl extends ServiceImpl<ContactMapper, Contact> impl
     @Override
     public boolean add(Contact contact) {
         return insert(contact);
+    }
+
+    @Override
+    public boolean detele(String id) {
+        EntityWrapper<Contact>ew = new EntityWrapper<>();
+        ew.eq("exam_id",id);
+        return delete(ew);
+
     }
 }

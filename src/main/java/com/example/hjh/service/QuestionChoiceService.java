@@ -28,7 +28,7 @@ public interface QuestionChoiceService extends IService<QuestionChoice> {
     public Response importQue(InputStream inputStream);
 
     //老师指定题目发布，列出所有题目列表
-    public Response lists(String course);
+    public List<QuestionChoice> lists(String course);
 
     //随机获取题目
     public QuestionChoice listRand(String course);

@@ -52,11 +52,11 @@ public class QuestionChoiceServiceImpl extends ServiceImpl<QuestionChoiceMapper,
     @Override
     public Response questions(Page<QuestionChoice> page, String id) {
         Map<Integer, Object> map = new TreeMap<>();
-//        for (QuestionChoice question : baseMapper.courses(page, id)) {
-        for (QuestionChoice question : baseMapper.courses(id)) {
+       for (QuestionChoice question : baseMapper.courses(page, id)) {
+//        for (QuestionChoice question : baseMapper.courses(id)) {
             map.put(question.getId(), question);
         }
-        return Response.success().putAllT(map);
+        return Response.success(baseMapper.selectTotal(id)).putAllT(map);
     }
 
     @Override
@@ -87,13 +87,13 @@ public class QuestionChoiceServiceImpl extends ServiceImpl<QuestionChoiceMapper,
     }
 
     @Override
-    public Response lists(String course) {
+    public List<QuestionChoice> lists(String course) {
         EntityWrapper<QuestionChoice> ew= new EntityWrapper<>();
         ew.eq("name",course);
         if (selectList(ew) == null) {
-            return Response.success(Collections.emptyList());
+            return Collections.emptyList();
         }
-        return Response.success(selectList(ew));
+        return selectList(ew);
 
 
     }

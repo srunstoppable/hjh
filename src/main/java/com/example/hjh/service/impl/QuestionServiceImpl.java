@@ -56,14 +56,15 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     @Override
     public Response questions(Page<Question> page, String id) {
         Map<Integer, Object> map = new TreeMap<>();
-//        for (Question question : baseMapper.courses(page, id)) {
-        for (Question question : baseMapper.courses(id)) {
+        for (Question question : baseMapper.courses(page, id)) {
+//        for (Question question : baseMapper.courses(id)) {
             map.put(question.getId(), question);
+//        }
         }
-//        return Response.success(baseMapper.selectTotal()).putAllT(map);
-        return Response.success().putAllT(map);
-    }
+            return Response.success(baseMapper.selectTotal(id)).putAllT(map);
+//        return Response.success().putAllT(map);
 
+    }
     @Override
     public Response importQue(InputStream inputStream) {
         try {
@@ -88,13 +89,13 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question> i
     }
 
     @Override
-    public Response lists(String course) {
+    public List<Question> lists(String course) {
         EntityWrapper<Question> ew = new EntityWrapper<>();
         ew.eq("name", course);
         if (selectList(ew) == null) {
-            return Response.success(Collections.emptyList());
+            return Collections.emptyList();
         }
-        return Response.success(selectList(ew));
+        return selectList(ew);
     }
 
     @Override

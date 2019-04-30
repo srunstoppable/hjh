@@ -15,5 +15,6 @@ public interface ContactService extends IService<Contact> {
 
     public boolean add(Contact contact);
 
+    public boolean detele(String id);
 
 }

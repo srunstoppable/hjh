@@ -111,7 +111,7 @@ public class UserinfoServiceImpl extends ServiceImpl<UserinfoMapper, Userinfo> i
     @Override
     public List<Userinfo> stuRand(String course) {
         List<Userinfo> list = baseMapper.student(course);
-        List<Userinfo> userinfolist = null;
+        List<Userinfo> userinfolist = new ArrayList<>();
         if (list == null) {
             return null;
         }

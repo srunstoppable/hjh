@@ -29,7 +29,7 @@ public interface QuestionService extends IService<Question> {
     public Response importQue(InputStream inputStream);
 
     //老师指定题目发布，列出所有题目列表
-    public Response lists(String course);
+    public List<Question> lists(String course);
 
     //随机获取题目
     public Question listRand(String course);

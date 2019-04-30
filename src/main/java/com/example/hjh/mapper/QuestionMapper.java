@@ -26,7 +26,7 @@ public interface QuestionMapper extends BaseMapper<Question> {
     public List<Question> courses(@Param("id") String id);
 
     @Select("select count(*) from question where name in (select name from course where userid = #{id})")
-    public int selectTotal();
+    public int selectTotal(@Param("id") String id);
 
     @Select("select * from question where id in (select question_id from contact where exam_id = #{id} and type ='judge')")
     public List<Question> ques(@Param("id")String id);

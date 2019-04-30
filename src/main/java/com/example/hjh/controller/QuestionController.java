@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -59,6 +61,9 @@ public class QuestionController extends BaseController {
 
     @Autowired
     private QuestionChoiceService questionChoiceService;
+
+    @Autowired
+    private CourseService courseService;
 
 
     @ApiOperation(value = "批量导入问题", notes = "批量导入问题", response = Response.class)
@@ -107,30 +112,46 @@ public class QuestionController extends BaseController {
     @ApiOperation(value = "指定题目发布，指定学生", notes = "指定题目发布，指定学生", response = Response.class)
     @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, paramType = "header")
     @PostMapping("/pub")
-    public Response publish(@RequestBody ConditionEntity conditionEntity, HttpServletRequest request) {
+    public Response publish(@RequestBody Condit condit, HttpServletRequest request) {
 
-        List<String> list = conditionEntity.getList();
-        List<Question> list1 = conditionEntity.getQuestions();
-        List<QuestionChoice> list2 = conditionEntity.getQuestionChoices();
+        List<String> list = condit.getList();
+        List<Integer> list1 = condit.getQuestions();
+        List<Question> lq = new ArrayList<>();
+        if (list1 != null) {
+            for (int i = 0; i < list1.size(); i++) {
+                lq.add(questionService.getOne(list1.get(i)));
+            }
+        }
+        List<QuestionChoice> lqc = new ArrayList<>();
+        List<Integer> list2 =condit.getQuestionChoices();
+        if (list2   != null) {
+            for (int i = 0; i < list2.size(); i++) {
+                lqc.add(questionChoiceService.getOne(list2.get(i)));
+            }
+        }
         if (list != null) {
             for (String user : list) {
                 Examination examination = new Examination();
                 String eid = UUID.randomUUID().toString().replace("-", "").substring(0, 9);
                 examination.setId(eid).setStuId(user).setPromulgator(JWTUtil.getUsername(JWTUtil.getToken(request)))
-                        .setTime(new Date()).setCourse(conditionEntity.getName()).setType("指定");
+                        .setTime(new Date()).setCourse(condit.getName()).setType("指定");
                 examinationService.add(examination);
                 //-----end  插入套题记录
 
                 //----start 插图套-题关联
-                for (Question question : list1) {
-                    Contact contact = new Contact();
-                    contact.setExamId(eid).setType(question.getType()).setQuestionId(question.getId());
-                    contactService.add(contact);
+                if (list1.size() != 0) {
+                    for (Question question : lq) {
+                        Contact contact = new Contact();
+                        contact.setExamId(eid).setType(question.getType()).setQuestionId(question.getId());
+                        contactService.add(contact);
+                    }
                 }
-                for (QuestionChoice questionChoice : list2) {
-                    Contact contact = new Contact();
-                    contact.setQuestionId(questionChoice.getId()).setType(questionChoice.getType()).setExamId(eid);
-                    contactService.add(contact);
+                if (list2.size() != 0) {
+                    for (QuestionChoice questionChoice : lqc) {
+                        Contact contact = new Contact();
+                        contact.setQuestionId(questionChoice.getId()).setType(questionChoice.getType()).setExamId(eid);
+                        contactService.add(contact);
+                    }
                 }
             }
         }
@@ -140,28 +161,45 @@ public class QuestionController extends BaseController {
     @ApiOperation(value = "指定题目发布，随机学生", notes = "指定题目发布，随机学生", response = Response.class)
     @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, paramType = "header")
     @PostMapping("/pubT")
-    public Response publishT(@RequestBody ConditionEntity conditionEntity, HttpServletRequest request) {
-        List<Userinfo> list = userinfoService.stuRand(conditionEntity.getName());
-        List<Question> list1 = conditionEntity.getQuestions();
-        List<QuestionChoice> list2 = conditionEntity.getQuestionChoices();
+    public Response publishT(@RequestBody Condit condit, HttpServletRequest request) {
+        List<Userinfo> list = userinfoService.stuRand(condit.getName());
+        List<Integer> list1 = condit.getQuestions();
+        List<Question> lq = new ArrayList<>();
+        if (list1 !=null) {
+            for (int i = 0; i < list1.size(); i++) {
+                lq.add(questionService.getOne(list1.get(i)));
+            }
+        }
+        List<Integer> list2 = condit.getQuestionChoices();
+        List<QuestionChoice> lqc = new ArrayList<>();
+        if (list2 != null) {
+            for (int i = 0; i < list2.size(); i++) {
+                lqc.add(questionChoiceService.getOne(list2.get(i)));
+            }
+        }
         if (list != null) {
             for (Userinfo userinfo : list) {
                 Examination examination = new Examination();
                 String eid = UUID.randomUUID().toString().replace("-", "").substring(0, 9);
                 examination.setId(eid).setStuId(userinfo.getId()).setPromulgator(JWTUtil.getUsername(JWTUtil.getToken(request)))
-                        .setTime(new Date()).setCourse(conditionEntity.getName()).setType("随机");
+                        .setTime(new Date()).setCourse(condit.getName()).setType("随机");
                 examinationService.add(examination);
                 //-----end  插入套题记录
                 //----start 插图套-题关联
-                for (Question question : list1) {
-                    Contact contact = new Contact();
-                    contact.setExamId(eid).setType(question.getType()).setQuestionId(question.getId());
-                    contactService.add(contact);
+                if(lq.size()!=0) {
+                    for (Question question : lq) {
+                        Contact contact = new Contact();
+                        contact.setExamId(eid).setType(question.getType()).setQuestionId(question.getId());
+                        contactService.add(contact);
+                    }
+
                 }
-                for (QuestionChoice questionChoice : list2) {
-                    Contact contact = new Contact();
-                    contact.setQuestionId(questionChoice.getId()).setType(questionChoice.getType()).setExamId(eid);
-                    contactService.add(contact);
+                if(lqc.size()!=0) {
+                    for (QuestionChoice questionChoice : lqc) {
+                        Contact contact = new Contact();
+                        contact.setQuestionId(questionChoice.getId()).setType(questionChoice.getType()).setExamId(eid);
+                        contactService.add(contact);
+                    }
                 }
             }
         }
@@ -174,7 +212,8 @@ public class QuestionController extends BaseController {
     @ApiOperation(value = "随机题目发布，学生抢答,redis并发", notes = "随机题目发布，学生抢答,redis并发", response = Response.class)
     @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, paramType = "header")
     @PostMapping("/pubRand")
-    public Response publishRand(@RequestParam("course") String name, HttpServletRequest request) {
+    public Response publishRand(@RequestBody CourseName courseName, HttpServletRequest request) {
+        String name = courseName.getName();
         Question question = questionService.listRand(name);
         QuestionChoice questionChoice = questionChoiceService.listRand(name);
         Examination examination = new Examination();
@@ -227,28 +266,33 @@ public class QuestionController extends BaseController {
     @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, paramType = "header")
     @PostMapping("/answer")
     public Response ans(@RequestBody AnsList ansList, HttpServletRequest request) {
+        Course course =courseService.course(ansList.getName());
         AnsRecord ansRecord = new AnsRecord();
         List<Answer> list = ansList.getList();
         ansRecord.setCount(list.size()).setStuId(JWTUtil.getUsername(JWTUtil.getToken(request)))
-                .setType(ansRecord.getType()).setPromulgator(ansList.getPromulgator())
+                .setType(ansRecord.getType()).setPromulgator(course.getUserid())
                 .setCourseName(ansList.getName());
         int total = list.size();
-        for (Answer answer : list) {
-            int right = 0;
-            if (answer.getType().equals("选择")) {
-                QuestionChoice questionChoice = questionChoiceService.getOne(answer.getId());
-                if (questionChoice.getAnswer().equalsIgnoreCase(answer.getContent())) {
-                    right++;
-                }
-            } else if (answer.getType().equals("判断")) {
-                Question question = questionService.getOne(answer.getId());
-                if (question.getAnswer().equalsIgnoreCase(answer.getContent())) {
-                    right++;
+        int right = 0;
+        if(list!=null) {
+            for (Answer answer : list) {
+                if (answer.getType().equals("choice")) {
+                    QuestionChoice questionChoice = questionChoiceService.getOne(answer.getId());
+                    if (questionChoice.getAnswer().equalsIgnoreCase(answer.getContent())) {
+                        right++;
+                    }
+                } else if (answer.getType().equals("judge")) {
+                    Question question = questionService.getOne(answer.getId());
+                    if (question.getAnswer().equalsIgnoreCase(answer.getContent())) {
+                        right++;
+                    }
                 }
             }
-            double result = (double) Math.round((right / total) * 1000) / 1000;
-            DecimalFormat decimalFormat = new DecimalFormat("0.00%");
-            ansRecord.setResult(decimalFormat.format(result));
+        }
+        ansRecord.setResult(accuracy(right, total, 1));
+
+        if(contactService.detele(ansList.getId())) {
+            examinationService.deleteById(ansList.getId());
         }
         return ansRecordService.add(ansRecord);
 
@@ -270,6 +314,25 @@ public class QuestionController extends BaseController {
 
     }
 
+    @ApiOperation(value = "老师选择题目构成套题，返回题目列表", notes = "老师选择题目构成套题，返回题目列表", response = Response.class)
+    @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, paramType = "header")
+    @GetMapping("/getQ")
+    public Response getQue(@RequestParam("name") String name) {
+        ConditionEntity conditionEntity = new ConditionEntity();
+        conditionEntity.setQuestions(questionService.lists(name));
+        conditionEntity.setQuestionChoices(questionChoiceService.lists(name));
+        return Response.success(conditionEntity);
 
+    }
+
+    public static String accuracy(double num, double total, int scale){
+        DecimalFormat df = (DecimalFormat)NumberFormat.getInstance();
+        //可以设置精确几位小数
+        df.setMaximumFractionDigits(scale);
+        //模式 例如四舍五入
+        df.setRoundingMode(RoundingMode.HALF_UP);
+        double accuracy_num = num / total * 100;
+        return df.format(accuracy_num)+"%";
+    }
 }
 

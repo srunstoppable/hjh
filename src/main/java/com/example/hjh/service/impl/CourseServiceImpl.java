@@ -132,12 +132,15 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
         EntityWrapper<Course> ew = new EntityWrapper<>();
         ew.eq("name", name);
         Course course = selectOne(ew);
+        if(course.getOpen().equals("Y")){
+            return Response.fail("已经开启签到!");
+        }
         course.setBegin(new Date());
         course.setLatitude(x);
         course.setLongitude(y);
         course.setOpen("Y");
         updateById(course);
-        return Response.success();
+        return Response.success("success");
     }
 
     @Override
@@ -145,9 +148,12 @@ public class CourseServiceImpl extends ServiceImpl<CourseMapper, Course> impleme
         EntityWrapper<Course> ew = new EntityWrapper<>();
         ew.eq("name", name);
         Course course = selectOne(ew);
+        if(course.getOpen().equals("N")){
+            return Response.fail("请勿重复关闭!");
+        }
         course.setOpen("N");
         updateById(course);
-        return Response.success();
+        return Response.success("success");
     }
 
     @Override

@@ -6,6 +6,8 @@ import com.example.hjh.mapper.AnsRecordMapper;
 import com.example.hjh.response.Response;
 import com.example.hjh.service.AnsRecordService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import com.example.hjh.service.ExaminationService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -23,6 +25,8 @@ import java.util.List;
 @Service
 public
 class AnsRecordServiceImpl extends ServiceImpl<AnsRecordMapper, AnsRecord> implements AnsRecordService {
+
+
 
     @Override
     public List<AnsRecord> listWeb(String id) {
@@ -65,6 +69,7 @@ class AnsRecordServiceImpl extends ServiceImpl<AnsRecordMapper, AnsRecord> imple
     @Override
     public Response add(AnsRecord ansRecord) {
         if(insert(ansRecord)){
+
             return Response.success(ansRecord);
         }
         return Response.fail("失败1");

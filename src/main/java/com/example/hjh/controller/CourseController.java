@@ -4,6 +4,7 @@ package com.example.hjh.controller;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.example.hjh.entity.Course;
 import com.example.hjh.entity.Userinfo;
+import com.example.hjh.entity.condition.CourseName;
 import com.example.hjh.entity.condition.Jw;
 import com.example.hjh.jwt.JWTUtil;
 import com.example.hjh.response.Response;
@@ -118,8 +119,8 @@ public class CourseController extends BaseController {
     @ApiOperation(value = "老师关闭签到", notes = "老师关闭签到", response = Response.class)
     @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, paramType = "header")
     @PostMapping("/close")
-    public Response close(@RequestParam("name") String name) {
-        return courseService.close(name);
+    public Response close(@RequestBody CourseName  courseName) {
+        return courseService.close(courseName.getName());
     }
 
 

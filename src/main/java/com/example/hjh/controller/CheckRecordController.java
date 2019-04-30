@@ -64,6 +64,5 @@ public class CheckRecordController {
         return Response.success(checkRecordService.checkIn(JWTUtil.getUsername(JWTUtil.getToken(request)), jw.getName(),jw.getLongitude(),jw.getLatitude()));
     }
 
-
 }
 
