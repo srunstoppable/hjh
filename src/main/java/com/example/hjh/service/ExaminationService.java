@@ -2,6 +2,7 @@ package com.example.hjh.service;
 
 import com.example.hjh.entity.Examination;
 import com.baomidou.mybatisplus.service.IService;
+import com.example.hjh.entity.condition.ExamChange;
 
 import java.util.List;
 
@@ -19,7 +20,7 @@ public interface ExaminationService extends IService<Examination> {
 
     public Examination getExam(String id);
 
-    public List<Examination> list(String id,String name);
+    public List<ExamChange> list(String id, String name);
 
     public List<Examination> noStu(String name);
 }

@@ -2,11 +2,14 @@ package com.example.hjh.service.impl;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.example.hjh.entity.Examination;
+import com.example.hjh.entity.condition.ExamChange;
 import com.example.hjh.mapper.ExaminationMapper;
 import com.example.hjh.service.ExaminationService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,14 +35,25 @@ public class ExaminationServiceImpl extends ServiceImpl<ExaminationMapper, Exami
     }
 
     @Override
-    public List<Examination> list(String id, String name) {
+    public List<ExamChange> list(String id, String name) {
+        List<ExamChange> list = new ArrayList<>();
         EntityWrapper<Examination>ew = new EntityWrapper<>();
         ew.eq("stu_id",id);
         ew.eq("course",name);
         if(selectList(ew) == null){
             return Collections.emptyList();
         }else {
-            return selectList(ew);
+            for (Examination examination:selectList(ew)){
+                    ExamChange examChange = new ExamChange();
+                    examChange.setCourse(examination.getCourse())
+                            .setId(examination.getId())
+                            .setPromulgator(examination.getPromulgator())
+                            .setType(examination.getType());
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                examChange.setTime(simpleDateFormat.format(examination.getTime()));
+                list.add(examChange);
+            }
+            return list;
         }
     }
 
