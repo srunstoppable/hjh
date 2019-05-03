@@ -44,7 +44,12 @@ public class FileController {
         String savePath = "/usr/local";
         String contentType = file.getContentType();
         String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-        String imageName = contentType.substring(contentType.indexOf("/") + 1);
+        String imageName = null;
+        if(contentType.substring(contentType.indexOf("/") + 1).equals("plain")){
+            imageName = "txt";
+        }else if (contentType.substring(contentType.indexOf("/") + 1).equals("jpeg")){
+            imageName = "jpg";
+        }
         String fileName = uuid + "." + imageName;
         File f = new File(savePath);
         com.example.hjh.entity.File file1 = new com.example.hjh.entity.File();
