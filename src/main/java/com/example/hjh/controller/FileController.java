@@ -37,7 +37,9 @@ public class FileController {
     @ApiOperation(value = "上传文件", notes = "上传文件")
     @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, paramType = "header")
     @PostMapping("/upload")
-    public Response upload(@RequestBody MultipartFile file, @RequestParam("course") String course, HttpServletRequest request) throws IOException {
+    public Response upload(@RequestBody MultipartFile file,  HttpServletRequest request) throws IOException {
+        String course = request.getParameter("name");
+        String token = request.getParameter("token");
         InputStream inputStream = file.getInputStream();
         String savePath = "/usr/local";
         String contentType = file.getContentType();
@@ -47,7 +49,7 @@ public class FileController {
         File f = new File(savePath);
         com.example.hjh.entity.File file1 = new com.example.hjh.entity.File();
         file1.setAccess("/usr/local/" + fileName).setCourse(course)
-                .setPromulgator(JWTUtil.getUsername(JWTUtil.getToken(request)))
+                .setPromulgator(JWTUtil.getUsername(token))
                 .setName(fileName);
         if (!f.exists()) {
             f.mkdirs();
@@ -103,7 +105,7 @@ public class FileController {
     @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, paramType = "header")
     @GetMapping("/files")
     public Response files(HttpServletRequest request){
-        return Response.success(fileService.files(JWTUtil.getUsername(JWTUtil.getToken(request))));
+        return fileService.files(JWTUtil.getUsername(JWTUtil.getToken(request)));
     }
 }
 

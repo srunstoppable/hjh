@@ -19,9 +19,12 @@ public interface FileService extends IService<File> {
 
     public File getFile(int id);
 
-    public List<File> files(String id);
+    public Response files(String id);
 
     public List<File> lists(String name);
 
+    public List<File> wxFiles(String id);
+
+    public Response deleteFile(int id);
 
 }

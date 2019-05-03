@@ -31,6 +31,7 @@
                 <li class="layui-nav-item"><a href="#" onclick="openTabs(this)">题库-判断题</a></li>
                 <li class="layui-nav-item"><a href="#" onclick="openTabs(this)">题库-选择题</a></li>
                 <li class="layui-nav-item"><a href="#" onclick="openTabs(this)">课堂问答记录</a></li>
+                <li class="layui-nav-item"><a href="#" onclick="openTabs(this)">文件管理</a></li>
             </ul>
         </div>
     </div>
@@ -87,6 +88,22 @@
                 });
             }
         }
+
+        if (value == "文件管理") {
+            var content = '<iframe scrolling="no" frameborder="0" src="/views/file.html" style="width:100%;height:100%;"></iframe>';
+            if ($('#tt').tabs('exists', '文件管理')) {
+
+                $('#tt').tabs('select', '文件管理');
+            } else {
+                $('#tt').tabs('add', {
+                    title: '文件管理',
+                    content: content,
+                    closable: true
+
+                });
+            }
+        }
+
         if (value == "考勤记录") {
             var content = '<iframe scrolling="no" frameborder="0" src="/views/checkRecord.html" style="width:100%;height:100%;"></iframe>';
             if ($('#tt').tabs('exists', '考勤记录')) {
