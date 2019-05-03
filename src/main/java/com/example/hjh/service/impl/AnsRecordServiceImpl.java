@@ -75,6 +75,7 @@ class AnsRecordServiceImpl extends ServiceImpl<AnsRecordMapper, AnsRecord> imple
 
     @Override
     public Response listStu(String course,String id) {
+        List<AnsRecordChange> ansRecordChanges=new ArrayList<>();
         EntityWrapper<AnsRecord> ew = new EntityWrapper<>();
         ew.eq("stu_id", id);
         ew.eq("course_name",course);
@@ -83,6 +84,19 @@ class AnsRecordServiceImpl extends ServiceImpl<AnsRecordMapper, AnsRecord> imple
         if (list .size() == 0) {
             return Response.success(Collections.emptyList());
         } else {
+            int i = 1;
+            for(AnsRecord ansRecord:list){
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                AnsRecordChange ansRecordChange = new AnsRecordChange();
+                ansRecordChange.setCount(ansRecord.getCount()).setCourseName(ansRecord.getCourseName())
+                        .setId(i).setTime(simpleDateFormat.format(ansRecord.getTime()))
+                        .setName(userinfoService.gerName(ansRecord.getStuId())).setStuId(ansRecord.getStuId())
+                        .setPromulgator(ansRecord.getPromulgator())
+                        .setType(ansRecord.getType()).setResult(ansRecord.getResult());
+                ansRecordChanges.add(ansRecordChange);
+                i++;
+            }
+
             return Response.success(list);
         }
     }
