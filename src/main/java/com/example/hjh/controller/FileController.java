@@ -45,10 +45,17 @@ public class FileController {
         String contentType = file.getContentType();
         String uuid = UUID.randomUUID().toString().replaceAll("-", "");
         String imageName = null;
-        if(contentType.substring(contentType.indexOf("/") + 1).equals("plain")){
-            imageName = "txt";
-        }else if (contentType.substring(contentType.indexOf("/") + 1).equals("jpeg")){
-            imageName = "jpg";
+        if(contentType.substring(contentType.indexOf("/") + 1)
+                .equals("vnd.openxmlformats-officedocument.spreadsheetml.sheet")){
+            imageName  = "xlsx";
+        }else if (contentType.substring(contentType.indexOf("/") + 1).equals("msword")){
+            imageName = "docx";
+        }else if(contentType.substring(contentType.indexOf("/") + 1)
+                .equals("vnd.openxmlformats-officedocument.presentationml.presentation")){
+            imageName = "pptx";
+        }
+        else {
+            imageName = contentType.substring(contentType.indexOf("/") + 1);
         }
         String fileName = uuid + "." + imageName;
         File f = new File(savePath);
