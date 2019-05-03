@@ -67,8 +67,25 @@ public class ExaminationServiceImpl extends ServiceImpl<ExaminationMapper, Exami
     }
 
     @Override
-    public List<Examination> noStu(String name) {
-            return baseMapper.exams(name);
+    public List<ExamChange> noStu(String name) {
+        List<ExamChange> examChanges = new ArrayList<>();
+        List<Examination> list = baseMapper.exams(name);
+        if(list.size() !=0){
+            int i =1;
+            for (Examination examination:list){
+                ExamChange examChange = new ExamChange();
+                examChange.setCourse(examination.getCourse()).setSerId(i)
+                        .setId(examination.getId())
+                        .setPromulgator(userinfoService.gerName(examination.getPromulgator()))
+                        .setType(examination.getType());
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                examChange.setTime(simpleDateFormat.format(examination.getTime()));
+                examChanges.add(examChange);
+                i++;
+            }
+
+        }
+            return examChanges;
 
     }
 }

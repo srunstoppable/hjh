@@ -22,5 +22,5 @@ public interface ExaminationService extends IService<Examination> {
 
     public List<ExamChange> list(String id, String name);
 
-    public List<Examination> noStu(String name);
+    public List<ExamChange> noStu(String name);
 }

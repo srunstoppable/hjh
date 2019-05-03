@@ -18,6 +18,6 @@ import java.util.List;
  */
 @Mapper
 public interface ExaminationMapper extends BaseMapper<Examination> {
-    @Select("select * from examination where isNull(stu_id) and course = #{course}")
+    @Select("select * from examination where isNull(stu_id) and course = #{course} order by time" )
     public List<Examination>exams(@Param("course")String course);
 }
