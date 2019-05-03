@@ -9,6 +9,7 @@ import com.example.hjh.response.Response;
 import com.example.hjh.service.CheckRecordService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.example.hjh.service.CourseService;
+import com.example.hjh.service.UserinfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,8 @@ public class CheckRecordServiceImpl extends ServiceImpl<CheckRecordMapper, Check
 
     @Autowired
     private CourseService courseService;
+    @Autowired
+    UserinfoService userinfoService;
 
     @Override
     public List<CheckRecord> lists(String id) {
@@ -44,7 +47,7 @@ public class CheckRecordServiceImpl extends ServiceImpl<CheckRecordMapper, Check
     public List<CheckRecordChange> listsTo(String course) {
         EntityWrapper<CheckRecord>ew=new EntityWrapper<>();
         ew.eq("course",course);
-
+        ew.orderBy("date");
         List<CheckRecordChange> list = new ArrayList<>();
         SimpleDateFormat simpleDateFormat=new SimpleDateFormat("yyyy-MM-dd");
         if (selectList(ew) .size() == 0) {
@@ -55,7 +58,8 @@ public class CheckRecordServiceImpl extends ServiceImpl<CheckRecordMapper, Check
             checkRecordChange.setCourse(checkRecord.getCourse())
                     .setDate(simpleDateFormat.format(checkRecord.getDate()))
                     .setLate(checkRecord.getLate())
-                    .setUserid(checkRecord.getUserid());
+                    .setUserid(checkRecord.getUserid())
+                    .setName(userinfoService.gerName(checkRecord.getUserid()));
             list.add(checkRecordChange);
         }
         return list;

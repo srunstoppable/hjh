@@ -14,6 +14,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public class AnsList {
+    private String type;
     private String name;
     private String promulgator;
     private List<Answer> list;

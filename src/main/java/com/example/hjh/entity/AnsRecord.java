@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import java.io.Serializable;
+import java.util.Date;
 
 import com.baomidou.mybatisplus.annotations.Version;
 
@@ -41,6 +42,7 @@ public class AnsRecord implements Serializable {
     private String courseName;
     @TableField("count")
     private Integer count;
-
+    @TableField("time")
+    private Date time;
 
 }

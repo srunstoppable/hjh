@@ -203,7 +203,7 @@ public class QuestionController extends BaseController {
                 }
             }
         }
-        return Response.success();
+        return Response.success(list);
 
 
     }
@@ -268,6 +268,8 @@ public class QuestionController extends BaseController {
     public Response ans(@RequestBody AnsList ansList, HttpServletRequest request) {
         Course course =courseService.course(ansList.getName());
         AnsRecord ansRecord = new AnsRecord();
+        ansRecord.setType(ansList.getType());
+        ansRecord.setTime(new Date());
         List<Answer> list = ansList.getList();
         ansRecord.setCount(list.size()).setStuId(JWTUtil.getUsername(JWTUtil.getToken(request)))
                 .setType(ansRecord.getType()).setPromulgator(course.getUserid())

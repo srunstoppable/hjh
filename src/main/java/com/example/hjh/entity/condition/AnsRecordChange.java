@@ -6,18 +6,28 @@ import lombok.experimental.Accessors;
 
 /**
  * @author s r
- * @date 2019/4/29
+ * @date 2019/5/3
  */
-
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-public class ExamChange {
-    private Integer serId;
-    private String id;
+public class AnsRecordChange {
+
+    private Integer id;
+
     private String promulgator;
-    private String time;
+
     private String stuId;
-    private String course;
+
+    private String name;
+
     private String type;
+
+    private String result;
+
+    private String courseName;
+
+    private Integer count;
+
+    private String time;
 }

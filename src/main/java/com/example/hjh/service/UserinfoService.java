@@ -46,4 +46,6 @@ public interface UserinfoService extends IService<Userinfo> {
     //TODO
     public List<Userinfo> stuRand(String course);
 
+    public String gerName(String id);
+
 }

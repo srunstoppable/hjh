@@ -127,4 +127,9 @@ public class UserinfoServiceImpl extends ServiceImpl<UserinfoMapper, Userinfo> i
         return userinfolist;
 
     }
+
+    @Override
+    public String gerName(String id) {
+        return selectById(id).getName();
+    }
 }

@@ -12,9 +12,10 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public class CheckRecordChange {
-    String userid;
-    String course;
-    String date;
-    String late;
+    private String userid;
+    private String course;
+    private String date;
+    private String late;
+    private String name;
 
 }
