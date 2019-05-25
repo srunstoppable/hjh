@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>新增user</title>
-    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
+    <script src="https://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
     <script src="/js/layui-v2.4.3/layui/layui.js"></script>
     <script src="/js/pub_js/time.js" type="text/javascript" charset="utf-8"></script>
     <script type="text/javascript" src="/js/jQuery/jquery.easyui.min.js"></script>
@@ -37,6 +37,13 @@
         </div>
     </div>
 
+    <div class="layui-form-item" style="width:40%">
+        <label class="layui-form-label">身份</label>
+        <div class="layui-input-block">
+            <input type="text" name="iden" id="iden" required lay-verify="required" placeholder="输入身份" autocomplete="off" class="layui-input"
+                   style="width: 200px;">
+        </div>
+    </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
             <button class="layui-btn" lay-submit lay-filter="formDemo">确定</button>

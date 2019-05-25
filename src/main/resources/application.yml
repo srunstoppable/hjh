@@ -1,7 +1,10 @@
 server:
   tomcat:
     uri-encoding: UTF-8
-  port: 8080
+  port: 8088
+  ssl:
+    key-store: 1940818_www.jocelynh.top.pfx
+    key-store-password: r1PVai3x
 spring:
   datasource:
     url: jdbc:mysql://47.102.118.47:3306/hjh?useSSL=false

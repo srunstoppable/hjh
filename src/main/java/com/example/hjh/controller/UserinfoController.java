@@ -50,7 +50,7 @@ public class UserinfoController extends BaseController {
     @ApiImplicitParam(name = "Authorization", value = "Authorization", required = true, paramType = "header")
     @PostMapping("/add")
     public Response add(@RequestBody Userinfo userinfo) {
-        return userinfoService.add(userinfo.setIden("教师"));
+        return userinfoService.add(userinfo);
     }
 
 
